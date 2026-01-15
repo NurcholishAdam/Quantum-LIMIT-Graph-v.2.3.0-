@@ -1,7 +1,34 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Header: React.FC = () => {
+  const [activeSection, setActiveSection] = useState('dashboard');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['dashboard', 'benchmarks', 'provenance', 'settings'];
+      const current = sections.find(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          return rect.top >= -100 && rect.top <= 300;
+        }
+        return false;
+      });
+      if (current) setActiveSection(current);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navItems = [
+    { id: 'dashboard', label: 'Dashboard' },
+    { id: 'benchmarks', label: 'Benchmarks' },
+    { id: 'provenance', label: 'Provenance' },
+    { id: 'settings', label: 'Settings' },
+  ];
+
   return (
     <header className="glass border-b border-slate-800 sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -9,21 +36,30 @@ const Header: React.FC = () => {
           <div className="w-8 h-8 rounded bg-gradient-to-br from-sky-400 to-indigo-600 flex items-center justify-center shadow-lg shadow-sky-500/20">
             <span className="text-white font-black text-lg">Q</span>
           </div>
-          <div>
+          <a href="#dashboard" className="block">
             <h1 className="text-lg font-black tracking-tighter text-white">
               LIMIT-GRAPH <span className="text-sky-400 text-sm font-normal ml-1 tracking-widest uppercase">v2.3.0</span>
             </h1>
             <p className="text-[10px] text-slate-500 font-mono -mt-1 uppercase tracking-widest">
               Quantum Agent Orchestration
             </p>
-          </div>
+          </a>
         </div>
         
         <nav className="hidden md:flex items-center gap-8">
-          <a href="#" className="text-xs font-bold text-sky-400 border-b-2 border-sky-400 pb-1">Dashboard</a>
-          <a href="#" className="text-xs font-bold text-slate-400 hover:text-white transition-colors">Benchmarks</a>
-          <a href="#" className="text-xs font-bold text-slate-400 hover:text-white transition-colors">Provenance</a>
-          <a href="#" className="text-xs font-bold text-slate-400 hover:text-white transition-colors">Settings</a>
+          {navItems.map((item) => (
+            <a
+              key={item.id}
+              href={`#${item.id}`}
+              className={`text-xs font-bold transition-all border-b-2 pb-1 ${
+                activeSection === item.id 
+                ? 'text-sky-400 border-sky-400' 
+                : 'text-slate-400 border-transparent hover:text-white'
+              }`}
+            >
+              {item.label}
+            </a>
+          ))}
         </nav>
 
         <div className="flex items-center gap-4">
