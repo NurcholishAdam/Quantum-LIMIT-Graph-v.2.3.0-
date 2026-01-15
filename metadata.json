@@ -1,5 +1,7 @@
 {
   "name": "Quantum LIMIT-GRAPH Dashboard",
   "description": "A high-performance visualization dashboard for the LIMIT-GRAPH v2.3.0 architecture, featuring agent orchestration graphs, QAOA quantum traversal paths, multilingual performance benchmarks, and provenance timelines powered by Gemini AI.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [
+    "geolocation"
+  ]
 }
